@@ -34,7 +34,7 @@ public class WaveManager : MonoBehaviour
         }
         else if (Time.time >= waveStartTime + 20f)
         {
-            // The current wave took too long, so mark it as cleared
+            //if wave go overtime
             waveCleared = true;
             waveClearedTime = Time.time;
             waveClearedText.gameObject.SetActive(true);
@@ -48,8 +48,7 @@ public class WaveManager : MonoBehaviour
 
     private void StartWave(int waveNumber)
     {
-        // Implement logic to start a new wave
-        // For example, you can spawn enemies and other wave-specific actions here.
+        
         waveStartTime = Time.time;
         waveBar.value = 0;
         waveClearedText.gameObject.SetActive(false);
