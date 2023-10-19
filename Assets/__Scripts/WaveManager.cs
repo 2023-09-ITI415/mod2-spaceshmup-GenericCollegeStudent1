@@ -11,8 +11,6 @@ public class WaveManager : MonoBehaviour
 
     private int currentWave = 1;
     private bool waveCleared = false;
-
-    private float waveDuration = 20f;
     private float waveStartTime;
 
     private void Start()
@@ -30,22 +28,22 @@ public class WaveManager : MonoBehaviour
             if (Time.time >= waveClearedTime + 5f)
             {
                 waveCleared = false;
+                DestroyAllEnemies(); // Destroy all enemies
                 StartNextWave();
             }
         }
-        else
+        else if (Time.time >= waveStartTime + 20f)
         {
-            float elapsedTime = Time.time - waveStartTime;
-            waveBar.value = Mathf.Clamp01(elapsedTime / waveDuration);
-
-            if (elapsedTime >= waveDuration)
-            {
-                // The current wave took too long, so mark it as cleared
-                waveCleared = true;
-                waveClearedTime = Time.time;
-                waveClearedText.gameObject.SetActive(true);
-            }
+            // The current wave took too long, so mark it as cleared
+            waveCleared = true;
+            waveClearedTime = Time.time;
+            waveClearedText.gameObject.SetActive(true);
+            DestroyAllEnemies(); // Destroy all enemies
         }
+
+        // Update the wave progress bar
+        float waveProgress = Mathf.Clamp01((Time.time - waveStartTime) / 20f);
+        waveBar.value = waveProgress;
     }
 
     private void StartWave(int waveNumber)
@@ -71,4 +69,14 @@ public class WaveManager : MonoBehaviour
     }
 
     private float waveClearedTime; // Time when the wave was cleared
+
+    private void DestroyAllEnemies()
+    {
+        // Find all enemies in the scene and destroy them
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            Destroy(enemy);
+        }
+    }
 }
